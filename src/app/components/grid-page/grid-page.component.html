@@ -6,7 +6,7 @@
         <en-text-field style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field>
 
         <div>
-          <en-button data-testid="navigate-users" type="submit">Search User</en-button>
+          <en-button data-testid="navigate-users" type="submit" [isDisabled] = "!gridForm.valid">Search User</en-button>
           <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()" >Reset</en-button>
         </div>
       </form>

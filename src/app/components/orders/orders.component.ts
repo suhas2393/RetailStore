@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ENModule } from 'en-angular';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { OrdersServiceService } from 'src/service/orders-service.service';
 
@@ -37,8 +37,8 @@ export class OrdersComponent implements OnInit {
   ngOnInit(): void {
     this.orderForm = new FormGroup({
       date: new FormControl(),
-      orderCount: new FormControl(),
-      amount: new FormControl(),
+      orderCount: new FormControl('',Validators.compose([Validators.required,Validators.pattern("^[0-9]*$")])),
+      amount: new FormControl('',Validators.compose([Validators.required,Validators.pattern("^[0-9]*$")])),
     });
 
     this.router.params.subscribe((params: Params) => this.currentUserId = params['userId']);

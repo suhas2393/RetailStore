@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ENModule } from 'en-angular';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // EC1 components
@@ -31,9 +31,9 @@ export class UserPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.userForm = new FormGroup({
-      name: new FormControl(''),
-      phone: new FormControl(''),
-      address: new FormControl(''),
+      name: new FormControl('',Validators.required),
+      phone: new FormControl('',Validators.compose([Validators.required,Validators.pattern("^[0-9]*$"),Validators.minLength(10),Validators.maxLength(10)])),
+      address: new FormControl('',Validators.required),
     });
     this.toastProp = false;
   }

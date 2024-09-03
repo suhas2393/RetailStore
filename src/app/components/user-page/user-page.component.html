@@ -12,7 +12,7 @@
         <en-text-field formControlName="address" type="text" data-testid="textarea-userAddr" label="Address" placeholder="Enter Address" variant="secondary"></en-text-field>
 
         <div>
-          <en-button data-testid="submit" type="submit">Add User</en-button>
+          <en-button data-testid="submit" type="submit" [isDisabled]="!userForm.valid">Add User</en-button>
           <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()" >Reset</en-button>
 
           <!-- <en-button data-testid="getUSers" variant="secondary" (click)="callUsers()" >Print Users</en-button> -->

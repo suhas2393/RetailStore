@@ -14,7 +14,7 @@
         <en-text-field formControlName="amount" data-testid="textarea-userAddr" label="Amount" variant="secondary"></en-text-field>
 
         <div>
-          <en-button data-testid="submit" type="submit">Add Order</en-button>
+          <en-button data-testid="submit" type="submit" [isDisabled] = "!orderForm.valid">Add Order</en-button>
 
           <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()">Reset</en-button>
         </div>

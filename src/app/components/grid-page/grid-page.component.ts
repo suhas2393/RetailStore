@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ENModule } from 'en-angular';
-import { FormGroup, FormControl, FormArray } from '@angular/forms';
+import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -93,7 +93,7 @@ export class GridPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.gridForm = new FormGroup({
-      searchString: new FormControl(''),
+      searchString: new FormControl('',Validators.compose([Validators.required])),
     });
 
     this.colDef = [
@@ -216,6 +216,9 @@ export class GridPageComponent implements OnInit {
     this.gridForm.reset({
       searchString: '',
     });
+    this.showUserInfo = false;
+    this.showRegister=false;
+    this.userFound = false;
   }
 
   goToOrders() {
