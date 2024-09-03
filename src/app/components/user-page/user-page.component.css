@@ -1,0 +1,15 @@
+#userFormEle en-heading{
+    font-size: 20px;
+    /* margin: 35px; */
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+#userFormEle en-text-field{
+    margin: 10px;
+}
+
+#userFormEle div{
+    display: flex;
+    justify-content: space-between;
+}

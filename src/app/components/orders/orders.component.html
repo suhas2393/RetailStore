@@ -1,0 +1,44 @@
+<div style="height: 100px;">
+    <div style="background: var(--en-theme-color-background-surface-elevation-0);display: flex;
+                   width: 100%;height: 100%;position: absolute;left: 0;right: 0;top: 0;
+                   align-items: center;justify-content: center;">
+      <form (ngSubmit)='addOrder()' [formGroup] = "orderForm" novalidate id="orderFormEle">
+        <div>
+          <en-heading variant="display-lg">Order Form</en-heading> 
+        </div>
+
+        <en-range-calendar data-testid="range-calendar" (done)="submitDate($event)" [enableRangeSelection]="false"></en-range-calendar>
+        
+        <en-text-field formControlName="date" id="date-input" data-testid="textarea-userDate" label="Selected Date" variant="secondary" isReadOnly="true"></en-text-field>
+        <en-text-field formControlName="orderCount" data-testid="textarea-userPhone" label="Order Count" variant="secondary"></en-text-field>
+        <en-text-field formControlName="amount" data-testid="textarea-userAddr" label="Amount" variant="secondary"></en-text-field>
+
+        <div>
+          <en-button data-testid="submit" type="submit">Add Order</en-button>
+
+          <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()">Reset</en-button>
+        </div>
+
+        
+
+      </form>
+      <!-- <en-button data-testid="getUSers" variant="secondary" (click)="callOrders()" >Print Orders</en-button> -->
+    </div>
+    <div style="padding-top: 10px;">
+      <en-toast-group
+      *ngIf="toastProp"
+      data-testid="toast-group"
+      [isActive]="toastProp"
+      position="top"
+      autoClose="true">
+      <en-toast
+        data-testid="toast"
+        [isActive]="true"
+        [isDismissible]="true"
+        [description]=""
+        variant="success"
+        (click) = 'onToastClick()'
+      >Order is added with ID {{orderId}}</en-toast>
+      </en-toast-group>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+#orderFormEle en-heading{
+    font-size: 30px;
+    /* margin: 35px; */
+    padding-bottom: 5px;
+    padding-left: 100px;
+}
+
+#orderFormEle en-text-field{
+    margin: 10px;
+}
+
+#orderFormEle div{
+    display: flex;
+    /* position: absolute; */
+    /* justify-content: center; */
+    justify-content: space-between;
+}

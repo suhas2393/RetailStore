@@ -1,0 +1,46 @@
+
+<div style="height: 100px;">
+    <div style="background: var(--en-theme-color-background-surface-elevation-0);display: flex;
+                   width: 100%;height: 100%;position: absolute;left: 0;right: 0;top: 0;
+                   align-items: center;justify-content: center;">
+      <form (ngSubmit)='addUser()' [formGroup] = "userForm" novalidate id="userFormEle">
+        <div>
+          <en-heading  variant="display-lg">User Form</en-heading> 
+        </div>
+        <en-text-field formControlName="name" type="text" data-testid="textarea-userName" label="Name" placeholder="Enter Name" variant="secondary"></en-text-field>
+        <en-text-field formControlName="phone" data-testid="textarea-userPhone" label="Phone" placeholder="Enter Phone Number" variant="secondary"></en-text-field>
+        <en-text-field formControlName="address" type="text" data-testid="textarea-userAddr" label="Address" placeholder="Enter Address" variant="secondary"></en-text-field>
+
+        <div>
+          <en-button data-testid="submit" type="submit">Add User</en-button>
+          <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()" >Reset</en-button>
+
+          <!-- <en-button data-testid="getUSers" variant="secondary" (click)="callUsers()" >Print Users</en-button> -->
+        </div>
+
+      </form>
+    
+    </div>
+
+    <div style="padding-top: 10px;">
+      <en-toast-group
+      *ngIf="toastProp"
+      data-testid="toast-group"
+      [isActive]="toastProp"
+      position="top"
+      autoClose="true">
+      <en-toast
+        data-testid="toast"
+        [isActive]="true"
+        [isDismissible]="true"
+        [description]=""
+        variant="success"
+        (click) = 'onToastClick()'
+        >User is added with ID {{userId}}</en-toast
+      >
+      </en-toast-group>
+    </div>
+</div>
+
+
+

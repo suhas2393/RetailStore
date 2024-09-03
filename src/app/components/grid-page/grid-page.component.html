@@ -1,0 +1,86 @@
+
+    <div style="background: var(--en-theme-color-background-surface-elevation-0);display: flex; flex-direction: column;
+                   width: 100%;height: 100%;position: absolute;left: 0;right: 0;top: 0;
+                   align-items: center;justify-content: center;">
+      <form (ngSubmit)='triggerSearch()' [formGroup]="gridForm" novalidate id="gridFormEle">
+        <en-text-field style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field>
+
+        <div>
+          <en-button data-testid="navigate-users" type="submit">Search User</en-button>
+          <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()" >Reset</en-button>
+        </div>
+      </form>
+
+        <div class="en-u-spacing--left" style="display: flex; margin: 10px;" *ngIf="showUserInfo">
+          <f-po><b> User name : {{userInfo.name}}</b></f-po>
+          <en-divider variant="vertical"></en-divider>
+          <f-po>User phone : {{userInfo.phone}}</f-po>
+          <en-divider variant="vertical"></en-divider>
+          <f-po>User address : {{userInfo.address}}</f-po>
+        </div>
+
+        <en-grid variant="1-2up" style="display: flex; margin: 10px;" *ngIf="showRegister">
+
+          <en-grid-item>
+            <f-po>
+              <p style="padding-right: 10px;">New user?</p>
+            </f-po>
+          </en-grid-item>
+
+          <en-grid-item>
+            <f-po>
+              <en-button data-testid="navigate-users" type="submit" href = 'users'>Register User</en-button>
+            </f-po>
+          </en-grid-item>
+        </en-grid>
+
+
+        <div class="grid-view" style="display: flex;flex-direction: column; margin-top: 10px;">
+          <div style="display: flex;">
+            <en-button style="margin-bottom: 10px;" data-testid="navigate-orders" type="submit" (click)="goToOrders()" *ngIf="userFound">Add new order</en-button>
+            <en-button style="padding-left: 10px;" data-testid="delete-btn" type="submit" (click)="deleteSelected()" *ngIf="userFound">Delete</en-button>
+
+            <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Chart data" *ngIf="userFound">
+              <en-button slot="trigger">Show chart</en-button>
+              <f-po>
+                <div>
+                  <ag-charts
+                    [options]="chartOptions">
+                  </ag-charts>
+                </div>
+              </f-po>
+            </en-dialog>
+
+          </div>
+          <ag-grid-angular *ngIf="userFound"
+            #gridList
+            class="ag-theme-alpine-dark"
+            style="height: 550px; width: 600px;"
+            [rowData]="rowData"
+            [columnDefs]="colDef"
+            [defaultColDef]="defaultColDef"
+            (gridReady)="onGridReady($event)"
+            rowSelection="multiple"
+            [pagination]="pagination"
+            (selectionChanged)="onSelectionChanged($event)"
+            [paginationPageSize]="paginationPageSize"
+            [paginationPageSizeSelector]="paginationSizeSelector"
+          />
+        </div>
+
+
+        
+
+        
+
+        
+    </div>  
+
+    
+
+    
+
+
+
+
+

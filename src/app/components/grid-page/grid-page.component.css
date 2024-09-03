@@ -1,0 +1,31 @@
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+.grid-view {
+    height: auto;
+}
+
+#gridFormEle en-heading{
+    font-size: 30px;
+    /* margin: 35px; */
+    padding-bottom: 5px;
+    padding-left: 125px;
+}
+
+#gridFormEle en-text-field{
+    margin: 10px;
+}
+
+#gridFormEle div{
+    display: flex;
+    /* position: absolute; */
+    /* justify-content: center; */
+    justify-content: space-between;
+}
+
+canvas{
+    /* width: 450px!important; */
+    ::ng-deep {
+        width: 450px!important;
+    }
+}

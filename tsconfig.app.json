@@ -1,0 +1,284 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": ["node"],
+    "paths": {
+      "@en-components/*": [
+        "node_modules/en-web-components/dist/en/components/*"
+      ],
+      "@en-alert": [
+        "node_modules/en-web-components/dist/en/components/alert/alert"
+      ],
+      "@en-avatar": [
+        "node_modules/en-web-components/dist/en/components/avatar/avatar"
+      ],
+      "@en-backdrop": [
+        "node_modules/en-web-components/dist/en/components/backdrop/backdrop"
+      ],
+      "@en-badge": [
+        "node_modules/en-web-components/dist/en/components/badge/badge"
+      ],
+      "@en-button": [
+        "node_modules/en-web-components/dist/en/components/button/button"
+      ],
+      "@en-card": [
+        "node_modules/en-web-components/dist/en/components/card/card"
+      ],
+      "@en-checkbox": [
+        "node_modules/en-web-components/dist/en/components/checkbox/checkbox"
+      ],
+      "@en-checkbox-item": [
+        "node_modules/en-web-components/dist/en/components/checkbox-item/checkbox-item"
+      ],
+      "@en-chip": [
+        "node_modules/en-web-components/dist/en/components/chip/chip"
+      ],
+      "@en-chip-group": [
+        "node_modules/en-web-components/dist/en/components/chip-group/chip-group"
+      ],
+      "@en-data-grid": [
+        "node_modules/en-web-components/dist/en/components/data-grid/data-grid"
+      ],
+      "@en-divider": [
+        "node_modules/en-web-components/dist/en/components/divider/divider"
+      ],
+      "@en-field-note": [
+        "node_modules/en-web-components/dist/en/components/field-note/field-note"
+      ],
+      "@en-floating-action-button": [
+        "node_modules/en-web-components/dist/en/components/floating-action-button/floating-action-button"
+      ],
+      "@en-floating-action-button-group": [
+        "node_modules/en-web-components/dist/en/components/floating-action-button-group/floating-action-button-group"
+      ],
+      "@en-heading": [
+        "node_modules/en-web-components/dist/en/components/heading/heading"
+      ],
+      "@en-layout": [
+        "node_modules/en-web-components/dist/en/components/layout/layout"
+      ],
+      "@en-layout-container": [
+        "node_modules/en-web-components/dist/en/components/layout-container/layout-container"
+      ],
+      "@en-layout-section": [
+        "node_modules/en-web-components/dist/en/components/layout-section/layout-section"
+      ],
+      "@en-radio": [
+        "node_modules/en-web-components/dist/en/components/radio/radio"
+      ],
+      "@en-radio-item": [
+        "node_modules/en-web-components/dist/en/components/radio-item/radio-item"
+      ],
+      "@en-switch": [
+        "node_modules/en-web-components/dist/en/components/switch/switch"
+      ],
+      "@en-text-field": [
+        "node_modules/en-web-components/dist/en/components/text-field/text-field"
+      ],
+      "@en-text-passage": [
+        "node_modules/en-web-components/dist/en/components/text-passage/text-passage"
+      ],
+      "@en-toast": [
+        "node_modules/en-web-components/dist/en/components/toast/toast"
+      ],
+      "@en-toast-group": [
+        "node_modules/en-web-components/dist/en/components/toast-group/toast-group"
+      ],
+      "@en-tabs": [
+        "node_modules/en-web-components/dist/en/components/tabs/tabs"
+      ],
+      "@en-tab-panel": [
+        "node_modules/en-web-components/dist/en/components/tab-panel/tab-panel"
+      ],
+      "@en-tab": [
+        "node_modules/en-web-components/dist/en/components/tab/tab"
+      ],
+      "@en-link": [
+        "node_modules/en-web-components/dist/en/components/link/link"
+      ],
+      "@en-progress": [
+        "node_modules/en-web-components/dist/en/components/progress/progress"
+      ],
+      "@en-textarea": [
+        "node_modules/en-web-components/dist/en/components/textarea/textarea"
+      ],
+      "@en-icons/*": [
+        "node_modules/en-web-components/dist/en/components/icon/icons/*"
+      ],
+      "@en-tooltip": [
+        "node_modules/en-web-components/dist/en/components/tooltip/tooltip"
+      ],
+      "@en-menu": [
+        "node_modules/en-web-components/dist/en/components/menu/menu"
+      ],
+      "@en-menu-item": [
+        "node_modules/en-web-components/dist/en/components/menu-item/menu-item"
+      ],
+      "@en-dialog": [
+        "node_modules/en-web-components/dist/en/components/dialog/dialog"
+      ],
+      "@en-stepper": [
+        "node_modules/en-web-components/dist/en/components/stepper/stepper"
+      ],
+      "@en-stepper-item": [
+        "node_modules/en-web-components/dist/en/components/stepper-item/stepper-item"
+      ],
+      "@en-loading-indicator": [
+        "node_modules/en-web-components/dist/en/components/loading-indicator/loading-indicator"
+      ],
+      "@en-input-stepper": [
+        "node_modules/en-web-components/dist/en/components/input-stepper/input-stepper"
+      ],
+      "@en-datepicker-field": [
+        "node_modules/en-web-components/dist/en/components/datepicker-field/datepicker-field"
+      ],
+      "@en-calendar": [
+        "node_modules/en-web-components/dist/en/components/calendar/calendar"
+      ],
+      "@en-grid": [
+        "node_modules/en-web-components/dist/en/components/grid/grid"
+      ],
+      "@en-grid-item": [
+        "node_modules/en-web-components/dist/en/components/grid-item/grid-item"
+      ],
+      "@en-breadcrumbs": [
+        "node_modules/en-web-components/dist/en/components/breadcrumbs/breadcrumbs"
+      ],
+      "@en-breadcrumbs-item": [
+        "node_modules/en-web-components/dist/en/components/breadcrumbs-item/breadcrumbs-item"
+      ],
+      "@en-contextual-menu": [
+        "node_modules/en-web-components/dist/en/components/contextual-menu/contextual-menu"
+      ],
+      "@en-dropdown": [
+        "node_modules/en-web-components/dist/en/components/dropdown/dropdown"
+      ],
+      "@en-dropdown-panel": [
+        "node_modules/en-web-components/dist/en/components/dropdown-panel/dropdown-panel"
+      ],
+      "@en-list": [
+        "node_modules/en-web-components/dist/en/components/list/list"
+      ],
+      "@en-list-item": [
+        "node_modules/en-web-components/dist/en/components/list-item/list-item"
+      ],
+      "@en-search-form": [
+        "node_modules/en-web-components/dist/en/components/search-form/search-form"
+      ],
+      "@en-side-menu": [
+        "node_modules/en-web-components/dist/en/components/side-menu/side-menu"
+      ],
+      "@en-side-menu-item": [
+        "node_modules/en-web-components/dist/en/components/side-menu-item/side-menu-item"
+      ],
+      "@en-panel": [
+        "node_modules/en-web-components/dist/en/components/panel/panel"
+      ],
+      "@en-button-group": [
+        "node_modules/en-web-components/dist/en/components/button-group/button-group"
+      ],
+      "@en-control-button": [
+        "node_modules/en-web-components/dist/en/components/control-button/control-button"
+      ],
+      "@en-control-button-group": [
+        "node_modules/en-web-components/dist/en/components/control-button-group/control-button-group"
+      ],
+      "@en-mini-map": [
+        "node_modules/en-web-components/dist/en/components/mini-map/mini-map"
+      ],
+      "@en-mini-map-layer": [
+        "node_modules/en-web-components/dist/en/components/mini-map-layer/mini-map-layer"
+      ],
+      "@en-mini-map-map": [
+        "node_modules/en-web-components/dist/en/components/mini-map-map/mini-map-map"
+      ],
+      "@en-navigation-menu": [
+        "node_modules/en-web-components/dist/en/components/navigation-menu/navigation-menu"
+      ],
+      "@en-notifications-indicator": [
+        "node_modules/en-web-components/dist/en/components/notifications-indicator/notifications-indicator"
+      ],
+      "@en-ogma-container": [
+        "node_modules/en-web-components/dist/en/components/ogma-container/ogma-container"
+      ],
+      "@en-accordion": [
+        "node_modules/en-web-components/dist/en/components/accordion/accordion"
+      ],
+      "@en-accordion-panel": [
+        "node_modules/en-web-components/dist/en/components/accordion-panel/accordion-panel"
+      ],
+      "@en-skeleton": [
+        "node_modules/en-web-components/dist/en/components/skeleton/skeleton"
+      ],
+      "@en-drawer": [
+        "node_modules/en-web-components/dist/en/components/drawer/drawer"
+      ],
+      "@en-file-upload": [
+        "node_modules/en-web-components/dist/en/components/file-upload/file-upload"
+      ],
+      "@en-datetimepicker-field": [
+        "node_modules/en-web-components/dist/en/components/datetimepicker-field/datetimepicker-field"
+      ],
+      "@en-time-selector-list": [
+        "node_modules/en-web-components/dist/en/components/time-selector-list/time-selector-list"
+      ],
+      "@en-slider": [
+        "node_modules/en-web-components/dist/en/components/slider/slider"
+      ],
+      "@en-pagination": [
+        "node_modules/en-web-components/dist/en/components/pagination/pagination"
+      ],
+      "@en-pagination-item": [
+        "node_modules/en-web-components/dist/en/components/pagination-item/pagination-item"
+      ],
+      "@en-multi-select-dropdown": [
+        "node_modules/en-web-components/dist/en/components/multi-select-dropdown/multi-select-dropdown"
+      ],
+      "@en-segment-button": [
+        "node_modules/en-web-components/dist/en/components/segment-button/segment-button"
+      ],
+      "@en-segment-button-group": [
+        "node_modules/en-web-components/dist/en/components/segment-button-group/segment-button-group"
+      ],
+      "@en-range-calendar": [
+        "node_modules/en-web-components/dist/en/components/range-calendar/range-calendar"
+      ],
+      "@en-extreme-ai-expert-button": [
+        "node_modules/en-web-components/dist/en/components/extreme-ai-expert-button/extreme-ai-expert-button"
+      ],
+      "@en-empty-state": [
+        "node_modules/en-web-components/dist/en/components/empty-state/empty-state"
+      ],
+      "@en-chart": [
+        "node_modules/en-web-components/dist/en/components/chart/chart"
+      ],
+      "@en-chart-panel": [
+        "node_modules/en-web-components/dist/en/components/chart-panel/chart-panel"
+      ],
+      "@en-tree-checkbox": [
+        "node_modules/en-web-components/dist/en/components/tree-checkbox/tree-checkbox"
+      ],
+      "@en-tree-dropdown": [
+        "node_modules/en-web-components/dist/en/components/tree-dropdown/tree-dropdown"
+      ],
+      "@en-tree-dropdown-panel": [
+        "node_modules/en-web-components/dist/en/components/tree-dropdown-panel/tree-dropdown-panel"
+      ],
+      "@en-flat-gauge": ["node_modules/en-web-components/dist/en/components/flat-gauge/flat-gauge"],
+      "@en-key-value-list": [
+        "node_modules/en-web-components/dist/en/components/key-value-list/key-value-list"
+      ],
+      "@en-key-value-item": [
+        "node_modules/en-web-components/dist/en/components/key-value-item/key-value-item"
+      ]
+    }
+  },
+  "files": [
+    "src/main.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ]
+}
