@@ -23,9 +23,3 @@
     justify-content: space-between;
 }
 
-canvas{
-    /* width: 450px!important; */
-    ::ng-deep {
-        width: 450px!important;
-    }
-}
