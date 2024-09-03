@@ -43,8 +43,6 @@ export class OrdersComponent implements OnInit {
 
     this.router.params.subscribe((params: Params) => this.currentUserId = params['userId']);
     this.toastProp = false;
-
-    // console.log(this.currentUserId);
   }
 
   addOrder() {

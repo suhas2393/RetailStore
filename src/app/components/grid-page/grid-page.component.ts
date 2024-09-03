@@ -57,9 +57,6 @@ export class GridPageComponent implements OnInit {
   // Chart Options
   public chartOptions: AgChartOptions;
 
-  
-
-
   gridForm: FormGroup;
   allUsers: Users[];
   allOrders: Orders[];
