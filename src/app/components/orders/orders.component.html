@@ -16,7 +16,9 @@
         <div>
           <en-button data-testid="submit" type="submit" [isDisabled] = "!orderForm.valid">Add Order</en-button>
 
-          <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()">Reset</en-button>
+          <en-button data-testid="reset" type="reset" style="padding-left: 10px; padding-right: 10px;" variant="secondary" (click)="resetForm()">Reset</en-button>
+
+          <en-button data-testid="navigate-users" type="submit" href = 'gridPage'>Back to Grid Page</en-button>
         </div>
 
         
