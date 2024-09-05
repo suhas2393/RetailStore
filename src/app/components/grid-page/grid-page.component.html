@@ -1,7 +1,26 @@
 
-    <div style="background: var(--en-theme-color-background-surface-elevation-0);display: flex; flex-direction: column;
+<div style="padding-top: 10px;">
+  <en-toast-group
+  *ngIf="toastProp"
+  data-testid="toast-group"
+  [isActive]="toastProp"
+  position="top"
+  autoClose="true">
+  <en-toast
+    data-testid="toast"
+    [isActive]="true"
+    [isDismissible]="true"
+    [description]=""
+    variant="success"
+    (click) = 'onToastClick()'
+  >Order is added with ID {{orderId}}</en-toast>
+  </en-toast-group>
+</div>
+
+<div style="background: var(--en-theme-color-background-surface-elevation-0);display: flex; flex-direction: column;
                    width: 100%;height: 100%;position: absolute;left: 0;right: 0;top: 0;
                    align-items: center;justify-content: center;">
+
       <form (ngSubmit)='triggerSearch()' [formGroup]="gridForm" novalidate id="gridFormEle">
         <en-text-field style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field>
 
@@ -37,10 +56,33 @@
 
         <div class="grid-view" style="display: flex;flex-direction: column; margin-top: 10px;">
           <div style="display: flex;">
-            <en-button style="margin-bottom: 10px;" data-testid="navigate-orders" type="submit" (click)="goToOrders()" *ngIf="userFound">Add new order</en-button>
-            <en-button style="padding-left: 10px;" data-testid="delete-btn" type="submit" (click)="deleteSelected()" *ngIf="userFound">Delete</en-button>
+
+            <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Chart data" *ngIf="userFound" heading="Order Form">
+              <en-button slot="trigger"><en-icon-add size="md"></en-icon-add></en-button>
+              <f-po>
+                <div>
+                  <form (ngSubmit)='addOrder()' [formGroup]="orderForm" novalidate id="orderFormEle">
+                    <!-- <en-text-field style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field> -->
+                    
+                    <en-datepicker-field id="datePicker-comp" data-testid="datetimepicker-field" label="Select a Date" variant="primary" (dateChanged) = 'onDateSelect($event)'></en-datepicker-field>
+                    <en-text-field style="width: 275px;" formControlName="amount" data-testid="textarea-userAddr" label="Amount" variant="secondary"></en-text-field>
+
+                    <div>
+                      <en-button data-testid="add-order" type="submit" [isDisabled] = "!orderForm.valid" (click)="resetOrderForm()">Add order</en-button>
+                      <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetOrderForm()" >Reset</en-button>
+                    </div>
+                  </form>
+                </div>
+              </f-po>
+            </en-dialog>
+
+            <!-- <en-button style="margin-bottom: 10px;" data-testid="navigate-orders" type="submit" (click)="goToOrders()" *ngIf="userFound">Add new order</en-button> -->
+            <en-button style="padding-left: 10px; margin-bottom: 10px;" data-testid="delete-btn" type="submit" (click)="deleteSelected()" *ngIf="userFound" [isDisabled] = "!enableDelete">Delete</en-button>
 
             <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Chart data" *ngIf="userFound">
+              <!-- <div>
+                <en-button data-testid="updateChart" style="padding-bottom: 10px;" variant="secondary" (click)="updateChart()" ><en-icon-refresh size="md"></en-icon-refresh></en-button>
+              </div> -->
               <en-button slot="trigger">Show chart</en-button>
               <f-po>
                 <div>
@@ -53,7 +95,7 @@
 
           </div>
           <ag-grid-angular *ngIf="userFound"
-            #gridList
+            #agGrid
             class="ag-theme-alpine-dark"
             style="height: 550px; width: 600px;"
             [rowData]="rowData"
@@ -67,11 +109,6 @@
             [paginationPageSizeSelector]="paginationSizeSelector"
           />
         </div>
-
-
-        
-
-        
 
         
     </div>  

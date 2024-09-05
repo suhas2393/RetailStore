@@ -5,7 +5,9 @@ import {
   OnInit,
   ViewChild,
   Input,
-  SimpleChanges
+  SimpleChanges,
+  ElementRef,
+  OnChanges
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ENModule } from 'en-angular';
@@ -20,6 +22,10 @@ import { AgGridModule } from 'ag-grid-angular';
 import '@en-button';
 import '@en-text-field';
 import '@en-dialog'
+import '@en-icons/add';
+import '@en-icons/refresh';
+import '@en-datepicker-field'
+import '@en-heading'
 import { UserServiceService } from 'src/service/user-service.service';
 import { Users } from 'src/models/users.model';
 import { OrdersServiceService } from 'src/service/orders-service.service';
@@ -41,7 +47,7 @@ import { AgChartOptions } from 'ag-charts-community';
   imports: [CommonModule, ENModule, FormsModule, ReactiveFormsModule,AgGridAngular,AgGridModule,AgCharts],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class GridPageComponent implements OnInit {
+export class GridPageComponent implements OnInit,OnChanges{
   constructor(private router: Router) {
     this.chartOptions = {
       // Data: Data to be displayed in the chart
@@ -52,12 +58,14 @@ export class GridPageComponent implements OnInit {
       height : 300
     };
   }
-  @ViewChild('gridList', { read: AgGridAngular, static: true }) alertGrid!: AgGridAngular;
+  // @ViewChild('gridList', { read: AgGridAngular, static: true }) alertGrid!: AgGridAngular;
+  @ViewChild('datePicker-comp') myDatePicker: ElementRef;
 
   // Chart Options
   public chartOptions: AgChartOptions;
 
   gridForm: FormGroup;
+  orderForm: FormGroup
   allUsers: Users[];
   allOrders: Orders[];
   userInfo: any;
@@ -66,6 +74,8 @@ export class GridPageComponent implements OnInit {
   colDef!: ColDef[];
   orders: Orders[] = [];
   userFound : boolean = false;
+  orderId : string;
+  toastProp : boolean;
 
   gridApi :any;
   gridColumnApi : any;
@@ -78,29 +88,50 @@ export class GridPageComponent implements OnInit {
   userService = inject(UserServiceService);
   orderService = inject(OrdersServiceService);
 
+  enableDelete : boolean = false;
+
   defaultColDef : ColDef = {
     flex : 1,
     filter: true,
   }
 
   @Input() rowData : any[] = [];
+  @ViewChild('agGrid') agGrid: AgGridAngular;
   isGridAPIReady : boolean = false;
   gridOptions : any;
   selectedRows : any = []
 
+  selectedDate : number;
+  rowsPresentCount: number;
+
   ngOnInit(): void {
+    this.toastProp = false;
     this.gridForm = new FormGroup({
       searchString: new FormControl('',Validators.compose([Validators.required])),
     });
+
+    this.orderForm = new FormGroup({
+      amount : new FormControl('',Validators.compose([Validators.required,Validators.pattern("^[0-9\.]+$")]))
+    })
 
     this.colDef = [
       {
         headerName: 'Date',
         field : 'date',
-        checkboxSelection: true
+        checkboxSelection: true,
+        valueFormatter: (params)=>{
+          const dateString = new Date(params.value).toISOString().split("T")[0];
+          return dateString.split("-").reverse().join("-");
+        },
+        // filter: "agDateColumnFilter", // Use the date filter
+        // filterParams : {
+        //   inRangeFloatingFilterDateFormat : "yyyy-mm-dd"
+        // },
+        // floatingFilter: true
+        sort: "asc"
       },
       {
-        headerName: 'Order Count',
+        headerName: 'Order ID',
         field : 'orderCount',
       },
       {
@@ -116,11 +147,28 @@ export class GridPageComponent implements OnInit {
   ngOnChanges(changes : SimpleChanges): void {
     if (this.isGridAPIReady && changes['rowData']) {
       this.gridOptions.api.setRowData(this.rowData);
+      this.gridOptions.api.refreshCells();
+      console.log("Chart options data before:",this.chartOptions.data)
+      this.chartOptions.data = this.rowData;
+      console.log("Chart options data after:",this.chartOptions.data)
     }
   }
 
   sortMonths(months : Orders[]) {
+    // let epochMonths = [];
     let dictionary : any = {}
+    months.map((data: any)=>{
+      let month = new Date(data.date).toString().split(" ")[1];
+      if (dictionary.hasOwnProperty(month)) {
+        // dictionary[monthName] += month['orderCount'];
+        dictionary[month] += 1;
+      }
+      else{
+        // dictionary[monthName] = month['orderCount'];
+        dictionary[month] = 1;
+      }
+    })
+    
     let chartData : any = [];
     const monthOrder : any = {
       "Jan": 1,
@@ -136,15 +184,6 @@ export class GridPageComponent implements OnInit {
       "Nov": 11,
       "Dec": 12
   };
-    months.map((month)=>{
-      let monthName = month['date'].toString().split(" ")[0]
-      if (dictionary.hasOwnProperty(month.date.toString().split(" ")[0])) {
-        dictionary[monthName] += month['orderCount'];
-      }
-      else{
-        dictionary[monthName] = month['orderCount'];
-      }
-    })
 
     const entries = Object.entries(dictionary);
     entries.sort(([monthA], [monthB]) => monthOrder[monthA] - monthOrder[monthB]);
@@ -156,7 +195,7 @@ export class GridPageComponent implements OnInit {
       chartData.push({"month" : key,"orderCount" : sortedDictionary[key]})
     }
 
-    console.log(chartData);
+    console.log("Chart data :",chartData);
     this.chartOptions.data = chartData;
   }
 
@@ -202,6 +241,8 @@ export class GridPageComponent implements OnInit {
           //Logic written for graph
           this.sortMonths(this.orders);
 
+          this.updateChart();
+
         });
       }
     });
@@ -225,15 +266,63 @@ export class GridPageComponent implements OnInit {
 
   onGridReady(params : any) {
     this.isGridAPIReady = true;
+    this.rowsPresentCount = params.api.getDisplayedRowCount();
   }
 
   onSelectionChanged(event : any) {
     this.selectedRows = event.api.getSelectedRows();
+    if (this.selectedRows.length >=1) {
+      this.enableDelete = true
+    }
+    else{
+      this.enableDelete = false;
+    }
   }
 
   deleteSelected(){
     this.selectedRows.map((selectedRow : any)=>{
       this.orderService.deleteOrders(selectedRow['id']);
     })
+    console.log(this.rowData);
   }
+
+  onDateSelect(event : any) {
+    this.selectedDate = Date.parse(event.detail.startDate);
+  }
+  
+  addOrder() {
+    
+    this.orderForm.value.date = this.selectedDate;
+    let count = 0
+    this.agGrid.api.forEachNode(node => count = count + 1);
+    this.orderForm.value.orderCount = count + 1;
+    this.orderForm.value.amount = Number(this.orderForm.value.amount);
+    this.orderForm.value.userId = this.userInfo.id;
+    this.orderService.addOrders(this.orderForm.value).subscribe((response) => {
+      console.log('Order added with ID :', response);
+      this.orderId = response;
+      this.toastProp = true;
+    });
+  }
+
+  onToastClick() {
+    this.toastProp = false;
+  }
+
+  resetOrderForm(){
+    // console.log(this.myDatePicker.nativeElement())
+    this.orderForm.reset({
+      amount : ''
+    })
+  }
+
+  updateChart() {
+    // console.log("Chart button click")
+    this.chartOptions = {
+      ...this.chartOptions,
+      data : this.chartOptions.data
+    }
+  }
+
+
 }
