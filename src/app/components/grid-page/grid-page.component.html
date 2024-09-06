@@ -22,10 +22,10 @@
                    align-items: center;justify-content: center;">
 
       <form (ngSubmit)='triggerSearch()' [formGroup]="gridForm" novalidate id="gridFormEle">
-        <en-text-field style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field>
+        <en-text-field #inputForm style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field>
 
         <div>
-          <en-button data-testid="navigate-users" type="submit" [isDisabled] = "!gridForm.valid">Search User</en-button>
+          <en-button #submitButton data-testid="navigate-users" type="submit" [isDisabled] = "!gridForm.valid">Search User</en-button>
           <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()" >Reset</en-button>
         </div>
       </form>
@@ -57,7 +57,7 @@
         <div class="grid-view" style="display: flex;flex-direction: column; margin-top: 10px;">
           <div style="display: flex;">
 
-            <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Chart data" *ngIf="userFound" heading="Order Form">
+            <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Chart data" *ngIf="userFound" heading="Order Form" (dialogClose)="onDialogClose($event)" #dialogForm>
               <en-button slot="trigger"><en-icon-add size="md"></en-icon-add></en-button>
               <f-po>
                 <div>

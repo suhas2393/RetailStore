@@ -7,13 +7,14 @@ import {
   Input,
   SimpleChanges,
   ElementRef,
-  OnChanges
+  OnChanges,
+  AfterViewInit
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ENModule } from 'en-angular';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import { AgGridModule } from 'ag-grid-angular';
 
@@ -39,6 +40,9 @@ import { AgCharts } from 'ag-charts-angular';
 // Chart Options Type Interface
 import { AgChartOptions } from 'ag-charts-community';
 
+import { Location } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
+
 @Component({
   selector: 'app-grid-page',
   standalone: true,
@@ -47,8 +51,8 @@ import { AgChartOptions } from 'ag-charts-community';
   imports: [CommonModule, ENModule, FormsModule, ReactiveFormsModule,AgGridAngular,AgGridModule,AgCharts],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class GridPageComponent implements OnInit,OnChanges{
-  constructor(private router: Router) {
+export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
+  constructor(private router: Router, private getParam : ActivatedRoute) {
     this.chartOptions = {
       // Data: Data to be displayed in the chart
       data: [],
@@ -57,6 +61,7 @@ export class GridPageComponent implements OnInit,OnChanges{
       width : 370,
       height : 300
     };
+
   }
   // @ViewChild('gridList', { read: AgGridAngular, static: true }) alertGrid!: AgGridAngular;
   @ViewChild('datePicker-comp') myDatePicker: ElementRef;
@@ -90,6 +95,8 @@ export class GridPageComponent implements OnInit,OnChanges{
 
   enableDelete : boolean = false;
 
+  newUserName : string = '';
+
   defaultColDef : ColDef = {
     flex : 1,
     filter: true,
@@ -97,6 +104,9 @@ export class GridPageComponent implements OnInit,OnChanges{
 
   @Input() rowData : any[] = [];
   @ViewChild('agGrid') agGrid: AgGridAngular;
+  @ViewChild('inputForm') inputForm : any;
+  @ViewChild('dialogForm') dialogForm : any;
+  @ViewChild('submitButton') submitButton : any;
   isGridAPIReady : boolean = false;
   gridOptions : any;
   selectedRows : any = []
@@ -123,11 +133,20 @@ export class GridPageComponent implements OnInit,OnChanges{
           const dateString = new Date(params.value).toISOString().split("T")[0];
           return dateString.split("-").reverse().join("-");
         },
-        // filter: "agDateColumnFilter", // Use the date filter
-        // filterParams : {
-        //   inRangeFloatingFilterDateFormat : "yyyy-mm-dd"
-        // },
-        // floatingFilter: true
+        filter : 'agDateColumnFilter',
+        filterParams : {
+          comparator : (filterLocalDateAtMidnight : Date, cellValue : string) => {
+            let selectedDateArray = filterLocalDateAtMidnight.toString().split(" ");
+            let cellValueArray = new Date(cellValue).toString().split(" ");
+            if (selectedDateArray.slice(0,4).join(" ") === cellValueArray.slice(0,4).join(" ")){
+              return 0;
+            }
+            else{
+              return -1;
+            }
+          }
+        }, 
+        floatingFilter:true, 
         sort: "asc"
       },
       {
@@ -140,6 +159,19 @@ export class GridPageComponent implements OnInit,OnChanges{
       }
     ]
   
+    // console.log("Localstorage item",localStorage.getItem('userInfo'));
+    // console.log("Input form",this.inputForm);
+    // console.log("Submit button",this.submitButton);
+    this.getParam.params.subscribe((param : Params) => this.newUserName = param['username']);
+  }
+
+  ngAfterViewInit(): void {
+    if (typeof this.newUserName!="undefined") {
+      this.inputForm.nativeElement.__value = this.newUserName;
+      this.gridForm.value.searchString = this.newUserName;
+      this.submitButton.nativeElement.isDisabled = false;
+      this.triggerSearch();
+    }
   }
 
   
@@ -257,6 +289,8 @@ export class GridPageComponent implements OnInit,OnChanges{
     this.showUserInfo = false;
     this.showRegister=false;
     this.userFound = false;
+    this.submitButton.nativeElement.isDisabled = true;
+    this.router.navigate(['gridPage']);
   }
 
   goToOrders() {
@@ -314,6 +348,7 @@ export class GridPageComponent implements OnInit,OnChanges{
     this.orderForm.reset({
       amount : ''
     })
+    this.dialogForm.nativeElement.querySelector('#datePicker-comp').shadowRoot.querySelector('.en-c-datepicker-field__input').value=""
   }
 
   updateChart() {
@@ -322,6 +357,10 @@ export class GridPageComponent implements OnInit,OnChanges{
       ...this.chartOptions,
       data : this.chartOptions.data
     }
+  }
+
+  onDialogClose(event : any){
+    this.dialogForm.nativeElement.querySelector('#datePicker-comp').shadowRoot.querySelector('.en-c-datepicker-field__input').value="";
   }
 
 

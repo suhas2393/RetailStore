@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { ENModule } from 'en-angular';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 // EC1 components
 import '@en-button';
@@ -29,6 +30,10 @@ export class UserPageComponent implements OnInit {
   toastProp : boolean;
   userId : string = '';
 
+  constructor(private router : Router){
+
+  }
+
   ngOnInit(): void {
     this.userForm = new FormGroup({
       name: new FormControl('',Validators.required),
@@ -45,6 +50,11 @@ export class UserPageComponent implements OnInit {
       this.toastProp = true;
       this.userId = response;
     });
+
+    setTimeout(()=>{                          
+      this.router.navigate(['gridPage',this.userForm.value.name]);
+    }, 3000);
+    
   }
 
   resetForm() {

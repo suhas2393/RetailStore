@@ -8,7 +8,8 @@ const routes: Routes = [
   {path: '', redirectTo: '/gridPage', pathMatch: 'full'},
   {path: 'users' , component: UserPageComponent},
   {path:'orders/:userId', component: OrdersComponent},
-  {path: 'gridPage',component : GridPageComponent}
+  {path: 'gridPage',component : GridPageComponent},
+  {path: 'gridPage/:username',component : GridPageComponent}
 ];
 
 @NgModule({
