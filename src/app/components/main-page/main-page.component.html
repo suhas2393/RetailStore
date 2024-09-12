@@ -1,0 +1,99 @@
+<div style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
+    <en-layout gap="sm" style="width: 100%;">
+        <en-layout-section>
+          <f-po>
+            <div style="height: 60px; display: flex;justify-content: space-between;margin: 10px;">
+                <div id="name" style="display: flex;justify-content: space-between;">
+                  <en-avatar data-testid="avatar-with-image" style="position: relative;left: 10px;">
+                    <img src="https://picsum.photos/80/80" alt="Alt text" width="800" height="800">
+                  </en-avatar>
+
+                <!-- <en-divider></en-divider> -->
+                  <h2 style="margin-left: 30px;margin-top: 10px">
+                      Dhan Manager
+                  </h2>
+                </div>
+
+
+                <div id="user-search" style="display: flex;justify-content: space-between;">
+                  <en-text-field #inputForm style="width: 150px;" type="text" data-testid="textarea-search" label="Search User" placeholder="" variant="secondary"></en-text-field>
+
+                  <en-button data-testid="search-users" type="submit" style="margin-left: 20px; margin-top: 5px;">Search User</en-button>
+                </div>
+
+                <div style="display: flex;justify-content: space-between;">
+                  <en-button data-testid="add-user" type="submit" style="padding-right: 10px;">Add user</en-button>
+
+                  <en-button data-testid="profile-user" type="submit"><en-icon-user></en-icon-user></en-button>
+                </div>
+
+            </div>
+          </f-po>
+        </en-layout-section>
+        <en-layout-section>
+          <f-po>
+            <div style="display: flex;justify-content: space-around;">
+              <div id="block1" style="height: 100px;width: 200px;border: 1px solid black; border-radius: 10px;background-color: #8981E5;display: flex;flex-direction: column;align-items: center;justify-content: center;color: black;">
+                <h2 style="position: relative;top: 10px;">
+                  {{totalRevenue}}
+                </h2>
+                <h4>
+                  Total Income
+                </h4>
+              </div>
+  
+              <div id="block2" style="height: 100px;width: 200px;border: 1px solid black;border-radius: 10px;background-color: #8981E5;display: flex;flex-direction: column;align-items: center;justify-content: center;color: black;">
+                <h2 style="position: relative;top: 10px;">
+                  {{totalOrders}}
+                </h2>
+                <h4>
+                  Total Orders
+                </h4>
+              </div>
+  
+              <div id="block3" style="height: 100px;width: 200px;border: 1px solid black;border-radius: 10px;background-color: #8981E5;display: flex;flex-direction: column;align-items: center;justify-content: center;color: black;">
+                <h2 style="position: relative;top: 10px;">
+                  {{totalUsers}}
+                </h2>
+                <h4>
+                  Total Customers
+                </h4>
+              </div>
+            </div>
+          </f-po>
+        </en-layout-section>
+    </en-layout>
+
+    <div style="float: left;left: 0;width: 100%;margin-top: 30px;display: flex;flex-direction: column;">
+      <en-layout style="width: 50%;">
+        <en-layout-section>
+          <f-po>
+            <div style="border: 1px solid white;">
+              <h3>
+                Order vs Months graph
+              </h3>
+              
+              <div>
+                <app-graph-component></app-graph-component>
+              </div>
+
+            </div>
+          </f-po>
+        </en-layout-section>
+        <en-layout-section>
+          <f-po>
+            <div style="border: 1px solid white;" >
+              <h3>
+                Users vs Months graph
+              </h3>
+              
+              <div>
+                Graph comes here
+              </div>
+
+            </div>
+          </f-po>
+        </en-layout-section>
+      </en-layout>
+    </div>
+</div>

@@ -14,6 +14,8 @@ import {getFirestore , provideFirestore} from '@angular/fire/firestore'
 
 // 2. Add your credentials from step 1
 import { environment } from 'src/environments/environment';
+import { MainPageComponent } from './components/main-page/main-page.component';
+import { GraphComponentComponent } from './components/graph-component/graph-component.component';
 
 
 

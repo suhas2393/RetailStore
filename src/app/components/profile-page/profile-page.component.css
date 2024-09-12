@@ -1,0 +1,9 @@
+.edit-mode{
+    background-color: green;
+    color: black;
+}
+
+.non-edit-mode {
+    background-color: red;
+    color: white;
+}

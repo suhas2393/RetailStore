@@ -22,11 +22,13 @@ import { AgGridModule } from 'ag-grid-angular';
 // EC1 components
 import '@en-button';
 import '@en-text-field';
-import '@en-dialog'
+import '@en-dialog';
+import '@en-tooltip';
 import '@en-icons/add';
 import '@en-icons/refresh';
 import '@en-datepicker-field'
-import '@en-heading'
+import '@en-heading';
+import '@en-icons/user';
 import { UserServiceService } from 'src/service/user-service.service';
 import { Users } from 'src/models/users.model';
 import { OrdersServiceService } from 'src/service/orders-service.service';
@@ -39,9 +41,6 @@ import { ColDef } from 'ag-grid-community';
 import { AgCharts } from 'ag-charts-angular';
 // Chart Options Type Interface
 import { AgChartOptions } from 'ag-charts-community';
-
-import { Location } from '@angular/common';
-import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-grid-page',
@@ -81,6 +80,7 @@ export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
   userFound : boolean = false;
   orderId : string;
   toastProp : boolean;
+  adminToastProp : boolean;
 
   gridApi :any;
   gridColumnApi : any;
@@ -114,10 +114,14 @@ export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
   selectedDate : number;
   rowsPresentCount: number;
 
+  isAdminClicked : boolean = false;
+
   ngOnInit(): void {
     this.toastProp = false;
+    this.adminToastProp = false;
     this.gridForm = new FormGroup({
       searchString: new FormControl('',Validators.compose([Validators.required])),
+      adminPassword: new FormControl('')
     });
 
     this.orderForm = new FormGroup({
@@ -180,9 +184,7 @@ export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
     if (this.isGridAPIReady && changes['rowData']) {
       this.gridOptions.api.setRowData(this.rowData);
       this.gridOptions.api.refreshCells();
-      console.log("Chart options data before:",this.chartOptions.data)
-      this.chartOptions.data = this.rowData;
-      console.log("Chart options data after:",this.chartOptions.data)
+      // this.chartOptions.data = this.rowData;
     }
   }
 
@@ -233,6 +235,18 @@ export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
 
   triggerSearch() {
     let count: number = 0;
+
+    if (this.gridForm.value.searchString === "admin" && this.isAdminClicked && this.gridForm.value.adminPassword === "123456") {
+      this.router.navigate(['adminPanel']);
+    }
+    else if (this.gridForm.value.searchString !== "admin" && this.isAdminClicked){
+      this.adminToastProp = true;
+      return;
+    }
+    else if (this.gridForm.value.searchString === "admin" && this.isAdminClicked && this.gridForm.value.adminPassword !== "123456"){
+      this.adminToastProp = true;
+      return;
+    }
 
     this.userService.getUsers().subscribe((data) => {
       this.userFound = false;
@@ -341,6 +355,7 @@ export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
 
   onToastClick() {
     this.toastProp = false;
+    this.adminToastProp = false;
   }
 
   resetOrderForm(){
@@ -361,6 +376,15 @@ export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
 
   onDialogClose(event : any){
     this.dialogForm.nativeElement.querySelector('#datePicker-comp').shadowRoot.querySelector('.en-c-datepicker-field__input').value="";
+  }
+
+  showProfile() {
+    // console.log("Clicked")
+    this.router.navigate(['profile'],{state:this.userInfo});
+  }
+
+  checkBoxClicked(event : any) {
+    this.isAdminClicked = event.detail.checked;
   }
 
 

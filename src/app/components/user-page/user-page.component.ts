@@ -40,6 +40,7 @@ export class UserPageComponent implements OnInit {
       phone: new FormControl('',Validators.compose([Validators.required,Validators.pattern("^[0-9]*$"),Validators.minLength(10),Validators.maxLength(10)])),
       address: new FormControl('',Validators.required),
     });
+    email: new FormControl('', Validators.required),
     this.toastProp = false;
   }
 

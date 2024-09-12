@@ -1,0 +1,95 @@
+<div style="padding-top: 10px;">
+  <en-toast-group
+  *ngIf="toastProp"
+  data-testid="toast-group"
+  [isActive]="toastProp"
+  position="top"
+  autoClose="true">
+  <en-toast
+    data-testid="toast"
+    [isActive]="true"
+    [isDismissible]="true"
+    [description]=""
+    variant="success"
+    (click) = 'onToastClick()'
+    >User {{userInfo.name}} information has been updated</en-toast
+  >
+  </en-toast-group>
+</div>
+
+<div style="height: 100px;">
+    <div style="background: var(--en-theme-color-background-surface-elevation-0);display: flex;
+                   width: 100%;height: 100%;position: absolute;left: 0;right: 0;top: 0;
+                   align-items: center;justify-content: center">
+                   <div style="border: 2px solid white;border-radius: 10px;width: 500px;height: auto;">
+                  
+                    <div style="display: flex;justify-content: space-between;">
+                      <h2 style="margin-left: 10px;">
+                        Profile details
+                      </h2>
+                      <en-button style="margin: 10px;" data-testid="submit" type="submit" (click)="enableEdit()">{{editButtonText}}</en-button>
+                    </div>
+                    <div style="display: flex;">
+                      <span style="margin-left: 20px;">
+                        Edit Mode : 
+                      </span>
+                      <span style="background-color: crimson;color: aliceblue;border: 1px solid crimson;border-radius: 5px;">
+                        {{editMode.toString()[0].toUpperCase() + editMode.toString().substring(1)}}
+                      </span>
+                    </div>
+                    <form (ngSubmit)='updateUser()' [formGroup] = "profileForm" novalidate>
+                    <en-grid variant="side-by-side" style="margin: 20px;">
+                      <en-grid-item style="width: 120px;">
+                        <f-po>Name</f-po>
+                      </en-grid-item>
+                      <en-grid-item>
+                        <f-po *ngIf="editMode === false">{{userInfo.name}}</f-po>
+                        <en-text-field formControlName="name" type="text" data-testid="textarea-userName" label="Name" placeholder="Enter Name" variant="secondary" *ngIf="editMode === true" hideLabel="true"></en-text-field>
+                      </en-grid-item>
+                    </en-grid>
+
+                    <en-grid variant="side-by-side" style="margin: 20px;">
+                      <en-grid-item style="width: 120px;">
+                        <f-po>Phone</f-po>
+                      </en-grid-item>
+                      <en-grid-item>
+                        <f-po *ngIf="editMode === false">{{userInfo.phone}}</f-po>
+                        <en-text-field formControlName="phone" type="text" label="Phone" placeholder="Enter Phone number Name" variant="secondary" *ngIf="editMode === true" hideLabel="true"></en-text-field>
+                      </en-grid-item>
+                    </en-grid>
+
+                    <en-grid variant="side-by-side" style="margin: 20px;">
+                      <en-grid-item style="width: 120px;">
+                        <f-po>Address</f-po>
+                      </en-grid-item>
+                      <en-grid-item>
+                        <f-po *ngIf="editMode === false">{{userInfo.address}}</f-po>
+                        <en-text-field formControlName="address" type="text" label="Address" placeholder="Enter address" variant="secondary" *ngIf="editMode === true" hideLabel="true"></en-text-field>
+                      </en-grid-item>
+                    </en-grid>
+
+                    <en-grid variant="side-by-side" style="margin: 20px;">
+                      <en-grid-item style="width: 120px;">
+                        <f-po>Email</f-po>
+                      </en-grid-item>
+                      <en-grid-item>
+                        <f-po *ngIf="editMode === false">suhasrk233#gmail.com</f-po>
+                        <en-text-field formControlName="email" type="text" label="Address" placeholder="Enter address" variant="secondary" *ngIf="editMode === true" hideLabel="true"></en-text-field>
+                      </en-grid-item>
+                    </en-grid>
+
+                    <div style="margin-left: 10px;margin-bottom: 10px;">
+                      <en-button data-testid="add-order" type="submit" [isDisabled] = "!profileForm.valid"  *ngIf="editMode === true">Update Profile</en-button>
+                      <en-button data-testid="reset" style="padding-left: 10px; padding-right: 10px;" type="reset" variant="secondary" (click)="resetForm()"  *ngIf="editMode === true">Reset</en-button>
+                    </div>
+                    
+
+
+                  </form>
+                   </div>
+    </div>
+</div>
+    
+
+
+

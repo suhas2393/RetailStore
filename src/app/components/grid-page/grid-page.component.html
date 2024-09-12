@@ -17,18 +17,42 @@
   </en-toast-group>
 </div>
 
+<div style="padding-top: 10px;">
+  <en-toast-group
+  *ngIf="adminToastProp"
+  data-testid="toast-group"
+  [isActive]="adminToastProp"
+  position="top"
+  autoClose="true">
+  <en-toast
+    data-testid="toast"
+    [isActive]="true"
+    [isDismissible]="true"
+    [description]=""
+    variant="danger"
+    (click) = 'onToastClick()'
+  >Enter correct credentials for admin {{orderId}}</en-toast>
+  </en-toast-group>
+</div>
+
+
 <div style="background: var(--en-theme-color-background-surface-elevation-0);display: flex; flex-direction: column;
                    width: 100%;height: 100%;position: absolute;left: 0;right: 0;top: 0;
                    align-items: center;justify-content: center;">
-
-      <form (ngSubmit)='triggerSearch()' [formGroup]="gridForm" novalidate id="gridFormEle">
-        <en-text-field #inputForm style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field>
-
-        <div>
-          <en-button #submitButton data-testid="navigate-users" type="submit" [isDisabled] = "!gridForm.valid">Search User</en-button>
-          <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()" >Reset</en-button>
-        </div>
-      </form>
+        
+        <form (ngSubmit)='triggerSearch()' [formGroup]="gridForm" novalidate id="gridFormEle">
+          <en-text-field #inputForm style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field>
+          <div>
+            <en-checkbox-item *ngIf="!userFound" style="padding-left: 50px;margin-top: -15px;" name="checkbox-name" value="checkbox-value-1" (change)="checkBoxClicked($event)" >is Admin ?</en-checkbox-item>
+          </div>
+          <div>
+            <en-text-field *ngIf="isAdminClicked" style="width: 200px;" formControlName="adminPassword" type="text" data-testid="textarea-search" label="Enter admin password" placeholder="" variant="secondary"></en-text-field>
+          </div>
+          <div>
+            <en-button #submitButton data-testid="navigate-users" type="submit" [isDisabled] = "!gridForm.valid">Search User</en-button>
+            <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetForm()" >Reset</en-button>
+          </div>
+        </form>
 
         <div class="en-u-spacing--left" style="display: flex; margin: 10px;" *ngIf="showUserInfo">
           <f-po><b> User name : {{userInfo.name}}</b></f-po>
@@ -38,7 +62,9 @@
           <f-po>User address : {{userInfo.address}}</f-po>
         </div>
 
-        <en-grid variant="1-2up" style="display: flex; margin: 10px;" *ngIf="showRegister">
+        
+
+        <en-grid variant="side-by-side" style="display: flex; margin: 10px;" *ngIf="showRegister">
 
           <en-grid-item>
             <f-po>
@@ -48,7 +74,7 @@
 
           <en-grid-item>
             <f-po>
-              <en-button data-testid="navigate-users" type="submit" href = 'users'>Register User</en-button>
+              <en-button data-testid="navigate-users" type="submit" href = 'users'>Register</en-button>
             </f-po>
           </en-grid-item>
         </en-grid>
@@ -92,6 +118,11 @@
                 </div>
               </f-po>
             </en-dialog>
+
+            <en-tooltip data-testid="tooltip" position="right" cssposition="fixed" *ngIf="userFound">
+              <en-button slot="trigger" data-testid="user-profile" style="padding-left: 10px;" (click)="showProfile()"><en-icon-user></en-icon-user></en-button>
+              Show Profile
+            </en-tooltip>
 
           </div>
           <ag-grid-angular *ngIf="userFound"
