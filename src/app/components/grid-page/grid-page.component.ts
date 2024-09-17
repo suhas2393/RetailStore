@@ -75,13 +75,14 @@ export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
   userInfo: any;
   showUserInfo: boolean = false;
   showRegister: boolean = false;
-  colDef!: ColDef[];
+  
   orders: Orders[] = [];
   userFound : boolean = false;
   orderId : string;
   toastProp : boolean;
   adminToastProp : boolean;
 
+  colDef!: ColDef[];
   gridApi :any;
   gridColumnApi : any;
 
@@ -286,6 +287,8 @@ export class GridPageComponent implements OnInit,OnChanges,AfterViewInit{
 
           //Logic written for graph
           this.sortMonths(this.orders);
+
+          this.chartOptions.data = [{'month' : 'Aug' , 'orderCount' : 2 }]
 
           this.updateChart();
 

@@ -1,3 +1,93 @@
+<div style="z-index: 99!important;position: fixed;top: 0;left: 0;width: 100%;">
+  <en-toast-group
+  *ngIf="toastProp"
+  data-testid="toast-group"
+  [isActive]="toastProp"
+  position="top"
+  autoClose="true">
+  <en-toast
+    data-testid="toast"
+    [isActive]="true"
+    [isDismissible]="true"
+    [description]=""
+    variant="danger"
+    (click) = 'onToastClick()'
+  >Feels like a new customer. Please click on Add user to register. </en-toast>
+  </en-toast-group>
+</div>
+
+<div style="padding-top: 10px;">
+  <en-toast-group
+  *ngIf="userAddedToast"
+  data-testid="toast-group"
+  [isActive]="userAddedToast"
+  position="top"
+  autoClose="true">
+  <en-toast
+    data-testid="toast"
+    [isActive]="true"
+    [isDismissible]="true"
+    [description]=""
+    variant="success"
+    (click) = 'onToastClick()'
+  >Successfully added new user. </en-toast>
+  </en-toast-group>
+</div>
+
+<div style="padding-top: 10px;">
+  <en-toast-group
+  *ngIf="orderAddedToast"
+  data-testid="toast-group"
+  [isActive]="orderAddedToast"
+  position="top"
+  autoClose="true">
+  <en-toast
+    data-testid="toast"
+    [isActive]="true"
+    [isDismissible]="true"
+    [description]=""
+    variant="success"
+    (click) = 'onToastClick()'
+  >New order added successfully!!!</en-toast>
+  </en-toast-group>
+</div>
+
+<div style="padding-top: 10px;">
+  <en-toast-group
+  *ngIf="emailSentToast"
+  data-testid="toast-group"
+  [isActive]="emailSentToast"
+  position="top"
+  autoClose="true">
+  <en-toast
+    data-testid="toast"
+    [isActive]="true"
+    [isDismissible]="true"
+    [description]=""
+    variant="danger"
+    (click) = 'onToastClick()'
+  >Email with Invoice PDF sent successfully!!! </en-toast>
+  </en-toast-group>
+</div>
+
+<div style="padding-top: 10px;">
+  <en-toast-group
+  *ngIf="updateProfileToast"
+  data-testid="toast-group"
+  [isActive]="updateProfileToast"
+  position="top"
+  autoClose="true">
+  <en-toast
+    data-testid="toast"
+    [isActive]="true"
+    [isDismissible]="true"
+    [description]=""
+    variant="success"
+    (click) = 'onToastClick()'
+  >Profile updated successfully!!! </en-toast>
+  </en-toast-group>
+</div>
+
 <div style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
     <en-layout gap="sm" style="width: 100%;">
         <en-layout-section>
@@ -10,21 +100,63 @@
 
                 <!-- <en-divider></en-divider> -->
                   <h2 style="margin-left: 30px;margin-top: 10px">
-                      Dhan Manager
+                      Retail store
                   </h2>
                 </div>
 
 
                 <div id="user-search" style="display: flex;justify-content: space-between;">
-                  <en-text-field #inputForm style="width: 150px;" type="text" data-testid="textarea-search" label="Search User" placeholder="" variant="secondary"></en-text-field>
+                  <form (ngSubmit)="triggerSearch()" [formGroup]="searchForm" novalidate>
+                    <div style="display: flex;">
+                      <en-text-field #inputForm style="width: 150px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User" placeholder="" variant="secondary"></en-text-field>
+                      <en-button data-testid="search-users" type="submit" style="margin-left: 20px; margin-top: 5px;" [isDisabled]="!this.searchForm.valid">Search User</en-button>
+                    </div>
+                  </form>
 
-                  <en-button data-testid="search-users" type="submit" style="margin-left: 20px; margin-top: 5px;">Search User</en-button>
+                
                 </div>
 
                 <div style="display: flex;justify-content: space-between;">
-                  <en-button data-testid="add-user" type="submit" style="padding-right: 10px;">Add user</en-button>
+                  <!-- <en-button data-testid="add-user" type="submit" style="padding-right: 10px;" (click)="showAddUserPopup()">Add user</en-button> -->
+                  <en-dialog data-testid="dialog" heading="Enter details to add a new user" (dialogOpen)="showAddUserPopup()" style="padding-right: 10px;" [isActive] = "userFormActive" #userFormDialog>
+                    <en-button slot="trigger">Add User</en-button>
+                    <f-po>
+                      <form (ngSubmit)='addUser()' [formGroup] = "userForm" novalidate id="userFormEle">
+                        <en-text-field formControlName="name" type="text" data-testid="textarea-userName" label="Name" placeholder="Enter Name" variant="secondary"></en-text-field>
+                        <en-text-field formControlName="phone" data-testid="textarea-userPhone" label="Phone" placeholder="Enter Phone Number" variant="secondary"></en-text-field>
+                        <en-text-field formControlName="address" type="text" data-testid="textarea-userAddr" label="Address" placeholder="Enter Address" variant="secondary"></en-text-field>
+                        <en-text-field formControlName="email" type="text" data-testid="textarea-email" label="Email" placeholder="Enter Email" variant="secondary"></en-text-field>
 
-                  <en-button data-testid="profile-user" type="submit"><en-icon-user></en-icon-user></en-button>
+                        <div>
+                          <en-button data-testid="submit" type="submit" [isDisabled]="!userForm.valid">Add User</en-button>
+                          <en-button data-testid="reset" style="padding-left: 10px; padding-right: 10px;" type="reset" variant="secondary" (click)="resetUserForm()" >Reset</en-button>
+                          <!-- <en-button data-testid="navigate-users" type="submit" href = 'gridPage'>Grid Page</en-button> -->
+                          <!-- <en-button data-testid="getUSers" variant="secondary" (click)="callUsers()" >Print Users</en-button> -->
+                        </div>
+
+                      </form>
+                    </f-po>
+                  </en-dialog>
+
+                  <!-- <en-button data-testid="profile-user" type="submit"><en-icon-user></en-icon-user></en-button> -->
+
+                  <en-dialog data-testid="dialog" heading="Enter details to add a update user" (dialogOpen)="showAddUserPopup()" style="padding-right: 10px;" [isActive] = "profileFormActive" #profileFormDialog>
+                    <en-button slot="trigger" [isDisabled]="!userFound">Update profile</en-button>
+                    <f-po>
+                      <form (ngSubmit)='updateProfile()' [formGroup] = "profileForm" novalidate id="userFormEle">
+                        <en-text-field formControlName="name" type="text" data-testid="textarea-userName" label="Name" placeholder="Enter Name" variant="secondary"></en-text-field>
+                        <en-text-field formControlName="phone" data-testid="textarea-userPhone" label="Phone" placeholder="Enter Phone Number" variant="secondary"></en-text-field>
+                        <en-text-field formControlName="address" type="text" data-testid="textarea-userAddr" label="Address" placeholder="Enter Address" variant="secondary"></en-text-field>
+                        <en-text-field formControlName="email" type="text" data-testid="textarea-email" label="Email" placeholder="Enter Email" variant="secondary"></en-text-field>
+
+                        <div>
+                          <en-button data-testid="submit" type="submit" [isDisabled]="!profileForm.valid">Update</en-button>
+                          <en-button data-testid="reset" style="padding-left: 10px; padding-right: 10px;" type="reset" variant="secondary" (click)="resetUserForm()" >Reset</en-button>
+                        </div>
+
+                      </form>
+                    </f-po>
+                  </en-dialog>
                 </div>
 
             </div>
@@ -41,6 +173,8 @@
                   Total Income
                 </h4>
               </div>
+
+              <en-divider variant="vertical"></en-divider>
   
               <div id="block2" style="height: 100px;width: 200px;border: 1px solid black;border-radius: 10px;background-color: #8981E5;display: flex;flex-direction: column;align-items: center;justify-content: center;color: black;">
                 <h2 style="position: relative;top: 10px;">
@@ -50,6 +184,8 @@
                   Total Orders
                 </h4>
               </div>
+
+              <en-divider variant="vertical"></en-divider>
   
               <div id="block3" style="height: 100px;width: 200px;border: 1px solid black;border-radius: 10px;background-color: #8981E5;display: flex;flex-direction: column;align-items: center;justify-content: center;color: black;">
                 <h2 style="position: relative;top: 10px;">
@@ -64,36 +200,135 @@
         </en-layout-section>
     </en-layout>
 
-    <div style="float: left;left: 0;width: 100%;margin-top: 30px;display: flex;flex-direction: column;">
-      <en-layout style="width: 50%;">
-        <en-layout-section>
-          <f-po>
-            <div style="border: 1px solid white;">
-              <h3>
-                Order vs Months graph
-              </h3>
-              
-              <div>
-                <app-graph-component></app-graph-component>
+    <div style="display: flex;width: 100%; height: 100%;justify-content: space-around;">
+      <div style="float: left;left: 0;width: 50%;margin-top: 30px;display: flex;flex-direction: column;">
+        <en-layout>
+          <en-layout-section>
+            <f-po>
+              <div style="display: flex;flex-direction: column;">
+                <h3 style="margin-left: 10px;">
+                  Order vs Months graph
+                </h3>
+                
+                <div>
+                  <!-- <app-graph-component></app-graph-component> -->
+                  <app-graph-component></app-graph-component>
+                  <!-- <app-user-graph-component></app-user-graph-component> -->
+                </div>
+  
               </div>
+            </f-po>
+          </en-layout-section>
+          <en-layout-section>
+            <f-po>
+              <div style="display: flex;flex-direction: column;align-items: center;justify-content: center;" >
+                <h3>
+                  Send invoice to email
+                </h3>
 
-            </div>
-          </f-po>
-        </en-layout-section>
-        <en-layout-section>
-          <f-po>
-            <div style="border: 1px solid white;" >
-              <h3>
-                Users vs Months graph
-              </h3>
-              
-              <div>
-                Graph comes here
+                <div style="margin-bottom: 10px;">
+                  <input type="file" (change)="handleUpload($event)" />
+                </div>
+
+                <div style="width: 50%;display: flex;">
+                  <form (ngSubmit)='sendEmail()'[formGroup]="emailGroup" novalidate style="display: flex;">
+                  <en-text-field formControlName="invoiceEmail" type="text" data-testid="textarea-invoice" label="Email address" placeholder="" variant="secondary"></en-text-field>
+                  <en-button style="padding-left: 10px;" data-testid="submit" type="submit" [isDisabled]="!userFound">Send Email</en-button>
+                </form>
+                </div>
+
+                <div>
+                  <en-checkbox-item name="email-check" value="checkbox-email-value" [isDisabled]="!userFound">Use registered email address</en-checkbox-item>
+                </div>
+  
               </div>
+            </f-po>
+          </en-layout-section>
+        </en-layout>
+      </div>
 
-            </div>
-          </f-po>
-        </en-layout-section>
-      </en-layout>
+      <!-- <en-divider variant="vertical"></en-divider> -->
+
+      <div style="float: left;left: 0;width: 50%;margin-top: 30px;display: flex;flex-direction: column;">
+        <en-layout>
+          <en-layout-section>
+            <f-po>
+              <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;">
+                <div style="display: flex;">
+                  <h3>
+                    {{headerText}}
+                  </h3>
+
+                  <en-button style="padding-left: 10px;position: absolute; right: 10px;margin-top: 15px;" data-testid="exportPdf-btn" type="submit" (click)="exportPdf()" [isDisabled]="!userFound">Export PDF</en-button>
+                </div>
+
+                <div style="display: flex;">
+                  <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Order Form" (dialogClose)="onDialogClose($event)" #dialogForm [isDisabled]="!userFound">
+                    <en-button slot="trigger" [isDisabled]="!userFound"><en-icon-add size="md"></en-icon-add></en-button>
+                    <f-po>
+                      <div>
+                        <form (ngSubmit)='addOrder()' [formGroup]="orderForm" novalidate id="orderFormEle">
+                          <!-- <en-text-field style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field> -->
+                          
+                          <en-datepicker-field id="datePicker-comp" data-testid="datetimepicker-field" label="Select a Date" variant="primary" (dateChanged) = 'onDateSelect($event)'></en-datepicker-field>
+                          <en-text-field style="width: 275px;" formControlName="amount" data-testid="textarea-userAddr" label="Amount" variant="secondary"></en-text-field>
+      
+                          <div>
+                            <en-button data-testid="add-order" type="submit" [isDisabled] = "!orderForm.valid" (click)="resetOrderForm()">Add order</en-button>
+                            <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetOrderForm()" >Reset</en-button>
+                          </div>
+                        </form>
+                      </div>
+                    </f-po>
+                  </en-dialog>
+  
+              <en-button style="padding-left: 10px; margin-bottom: 10px;" data-testid="delete-btn" type="submit" (click)="deleteSelected()" [isDisabled] = "!enableDelete">Delete</en-button>
+  
+              <!-- <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Chart data">
+                
+                <en-button slot="trigger">Show chart</en-button>
+                <f-po>
+                  <div>
+                    <ag-charts
+                      [options]="chartOptions">
+                    </ag-charts>
+                  </div>
+                </f-po>
+              </en-dialog> -->
+                </div>
+
+
+                
+
+                <ag-grid-angular 
+                  #agGrid
+                  class="ag-theme-alpine-dark"
+                  style="height: 550px; width: 600px;"
+                  [rowData]="rowData"
+                  [columnDefs]="colDef"
+                  [defaultColDef]="defaultColDef"
+                  (gridReady)="onGridReady($event)"
+                  rowSelection="multiple"
+                  [pagination]="pagination"
+                  (selectionChanged)="onSelectionChanged($event)"
+                  [paginationPageSize]="paginationPageSize"
+                  [paginationPageSizeSelector]="paginationSizeSelector"
+                />
+  
+          </div>
+            </f-po>
+          </en-layout-section>
+        </en-layout>
+      </div>
     </div>
+
+
+    
+
+    
+
+
+    
 </div>
+
+

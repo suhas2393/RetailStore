@@ -10,7 +10,7 @@ import { ENModule } from 'en-angular';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {Chart,registerables} from 'chart.js';
+import {Chart,registerables} from 'chart.js/auto';
 Chart.register(...registerables)
 
 // EC1 components
@@ -38,6 +38,8 @@ import { Orders } from 'src/models/orders.model';
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class GraphComponentComponent implements OnInit {
+
+  myChart : any = null;
 
   orderData : any = [];
 
@@ -68,9 +70,6 @@ export class GraphComponentComponent implements OnInit {
         
       }
     })
-
-    
-
   }
 
 
@@ -118,39 +117,60 @@ export class GraphComponentComponent implements OnInit {
 
 
   RenderCharts(labelData : any, mainData : any){
+
+    labelData = Array.from(new Set(labelData));
+    // mainData = Array.from(new Set(mainData));
+    mainData = mainData.slice(0,labelData.length)
+
     let bgColorArray = [];
     let borderColorArray = [];
     
 
     for(let i=0;i<labelData.length;i++) {
-      let r = Math.floor(Math.random() * 256);
-      let g = Math.floor(Math.random() * 256);
-      let b = Math.floor(Math.random() * 256);
+      // let r = Math.floor(Math.random() * 256);
+      let r = 137;
+      let g = 129;
+      let b = 229;
+      // let g = Math.floor(Math.random() * 256);
+      // let b = Math.floor(Math.random() * 256);
       bgColorArray.push('rgba'+ '(' + String(r) + ',' + String(g) + ',' + String(b) + ',' + '0.5)');
-      borderColorArray.push('rgba'+ '(' + String(r) + ',' + String(g) + ',' + String(b) + ',' + '1)');
+      // borderColorArray.push('rgba'+ '(' + String(r) + ',' + String(g) + ',' + String(b) + ',' + '1)');
     }
-    const myChart = new Chart("piechart", {
-      type: 'bar',
+
+    if (this.myChart!=null) {
+      this.myChart.destroy();
+    }
+    this.myChart = new Chart("piechart", {
+      type: 'line',
       data: {
           labels: labelData,
           datasets: [{
               label: 'Order count',
               data: mainData,
-              backgroundColor: bgColorArray,
+              fill: false,
+              // backgroundColor: bgColorArray,
               borderColor: bgColorArray,
-              borderWidth: 1
+              // borderWidth: 1
           }]
       },
       options: {
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
+        animations: {
+          tension: {
+            duration: 3000,
+            easing: 'linear',
+            from: 1,
+            to: 0,
+            loop: true
           }
-      }
-  });
+        },
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+    });
+
   }
-
-
-
 }
+

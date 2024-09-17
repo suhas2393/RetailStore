@@ -10,6 +10,29 @@
     // Set the window property before Angular initializes
     window["enAutoRegistry"] = true;
   </script>
+  <script
+    onload="cdnLoaded()" onerror="cdnError()" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.12/pdfmake.min.js" ></script>
+  <script
+    onload="cdnLoaded()" onerror="cdnError()" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.12/vfs_fonts.js"></script>
+
+    <script>
+      function cdnLoaded() {
+        console.log('loaded');
+        // var def = {
+        //   content : [
+        //     "Hello"
+        //   ]
+        // }
+        // pdfMake.createPdf(def).download()
+      }
+      
+      function cdnError() {
+        console.log('not loaded');
+        // do error handling here
+      }
+    </script>
 
 </head>
 <body>

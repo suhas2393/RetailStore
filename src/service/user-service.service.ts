@@ -1,5 +1,5 @@
 import { Injectable , inject } from '@angular/core';
-import { collectionData, Firestore ,collection, addDoc,doc,setDoc} from '@angular/fire/firestore';
+import { collectionData, Firestore ,collection, addDoc,doc,setDoc,deleteDoc} from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { Users } from 'src/models/users.model';
 
@@ -40,5 +40,11 @@ export class UserServiceService {
 
     return from(promise)
   }
+
+  getUserById(userId : string): Observable <void>{
+    const docRef = doc(this.firestore,'users/'+userId);
+    const promise = deleteDoc(docRef);
+    return from(promise);
+  } 
   
 }

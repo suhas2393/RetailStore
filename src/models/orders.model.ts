@@ -4,4 +4,5 @@ export class Orders {
     date : number;
     orderCount : number;
     amount : number;
+    userName : string;
 }
