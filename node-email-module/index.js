@@ -23,8 +23,8 @@ app.post('/send-email', (req, res) => {
     host: 'smtp.gmail.com',
     port : 465,
     auth: {
-      user: 'naanu9110@gmail.com', // Replace with your email address
-      pass: 'wsencnhgsoasxpqa' // Replace with your email password
+      user: 'suhaspersonal5@gmail.com', // Replace with your email address
+      pass: 'vmazuiuaqipjqeyh' // Replace with your email password
     }
   });
 

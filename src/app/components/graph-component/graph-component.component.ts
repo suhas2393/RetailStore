@@ -44,12 +44,13 @@ export class GraphComponentComponent implements OnInit {
   orderData : any = [];
 
   chartData:any;
+  chartDataUsers : any;
 
   labelData : any[] = [];
   realData : any[] = [];
   colorData : any[] = [];
 
-  constructor( private orderService : OrdersServiceService){
+  constructor( private orderService : OrdersServiceService, private userService : UserServiceService){
     
   }
 
@@ -70,14 +71,32 @@ export class GraphComponentComponent implements OnInit {
         
       }
     })
+
+    // this.userService.getUsers().subscribe((data)=>{
+    //   this.chartDataUsers = data;
+    //   if(this.chartDataUsers!=null) {
+    //     let dataObject1=[];
+    //     dataObject1 = this.sortMonths(this.chartDataUsers);
+    //     console.log("From graph component:",dataObject1);
+    //   }
+    // })
+
   }
 
 
-  sortMonths(months : Orders[]) {
+  sortMonths(months : any) {
     // let epochMonths = [];
     let dictionary : any = {}
     months.map((data: any)=>{
-      let month = new Date(data.date).toString().split(" ")[1];
+      let dateData : number;
+      if("registerDate" in data) {
+        dateData = data.registerDate;
+      }
+      else{
+        dateData = data.date;
+      }
+        
+      let month = new Date(dateData).toString().split(" ")[1];
       if (dictionary.hasOwnProperty(month)) {
         // dictionary[monthName] += month['orderCount'];
         dictionary[month] += 1;
@@ -154,6 +173,11 @@ export class GraphComponentComponent implements OnInit {
           }]
       },
       options: {
+
+      responsive: true,
+      maintainAspectRatio: false,
+      aspectRatio: 1.5, // Set a custom aspect ratio if needed
+        
         animations: {
           tension: {
             duration: 3000,

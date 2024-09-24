@@ -38,6 +38,9 @@ import '@en-datepicker-field';
 import '@en-heading';
 import '@en-icons/user';
 import '@en-avatar';
+import '@en-icons/circle';
+import '@en-icons/delete';
+import '@en-icons/export';
 
 import { UserServiceService } from 'src/service/user-service.service';
 import { OrdersServiceService } from 'src/service/orders-service.service';
@@ -53,6 +56,8 @@ import { Orders } from 'src/models/orders.model';
 import * as pdfMake from 'pdfmake/build/pdfMake';
 // import { Title } from 'chart.js';
 import { HttpClient } from '@angular/common/http';
+import { isNullOrUndef } from 'chart.js/dist/helpers/helpers.core';
+import { Users } from 'src/models/users.model';
 
 @Component({
   selector: 'app-main-page',
@@ -78,7 +83,7 @@ export class MainPageComponent implements OnInit {
   @ViewChild('inputForm') inputForm : any;
 
   totalOrders: number;
-  totalUsers: number;
+  totalUsers: any;
   totalRevenue: number;
   userForm: FormGroup;
   emailGroup : FormGroup;
@@ -94,6 +99,9 @@ export class MainPageComponent implements OnInit {
   selectedDate: number;
   enableDelete: boolean;
 
+  allOrderData : Orders[];
+  allUserData : Users[];
+
   selectedRows : any = []
 
   public chartOptions: AgChartOptions;
@@ -101,6 +109,7 @@ export class MainPageComponent implements OnInit {
   // AG GRID properties
   colDef!: ColDef[];
   colDefNew: ColDef[];
+  userColDef : ColDef[];
   gridApi: any;
   gridOptions: any;
   gridColumnApi: any;
@@ -127,6 +136,7 @@ export class MainPageComponent implements OnInit {
   @ViewChild('agGrid') agGrid: AgGridAngular;
   @ViewChild('dialogForm') dialogForm : any;
   @ViewChild('userFormDialog') userFormDialog: any;
+  @ViewChild('emailInput') emailInput : ElementRef;
 
   defaultColDef: ColDef = {
     flex: 1,
@@ -141,10 +151,12 @@ export class MainPageComponent implements OnInit {
   ngOnInit(): void {
     this.usersService.getUsers().subscribe((data) => {
       this.totalUsers = data.length;
+      this.allUserData = data;
     });
 
     this.orderService.getOrders().subscribe((data) => {
       let amount: number = 0;
+      this.allOrderData = data;
       this.totalOrders = data.length;
       data.map((order) => {
         amount = amount + order.amount;
@@ -241,6 +253,9 @@ export class MainPageComponent implements OnInit {
       {
         headerName: 'Amount',
         field: 'amount',
+        valueFormatter: (params) => {
+          return '₹ ' + params.value.toFixed(2); // Formats to 2 decimal places
+        }
       },
     ];
 
@@ -280,7 +295,29 @@ export class MainPageComponent implements OnInit {
       {
         headerName: 'Amount',
         field: 'amount',
+        valueFormatter: (params) => {
+          return '₹ ' + params.value.toFixed(2); // Formats to 2 decimal places
+        }
       },
+    ];
+
+    this.userColDef = [
+      {
+        headerName: 'Customer Name',
+        field: 'name',
+      },
+      {
+        headerName: 'Phone number',
+        field: 'phone',
+      },
+      {
+        headerName: 'Email Address',
+        field: 'email',
+      },
+      {
+        headerName: 'Address',
+        field: 'address',
+      }
     ];
 
     this.chartOptions = {
@@ -371,18 +408,39 @@ export class MainPageComponent implements OnInit {
         this.rowData = []
       } else {
         this.orderService.getOrders().subscribe((data) => {
+          this.totalRevenue = 0;
           let orders: any = [];
           let allOrders = data;
           allOrders.forEach((order) => {
             if (this.userInfo.id === order.userId) {
               orders.push(order);
+              this.totalRevenue = this.totalRevenue + order.amount;
             }
           });
           console.log('All orders by ' + this.userInfo.name + ' is :', orders);
           this.rowData = orders;
+          this.totalOrders = orders.length;
           this.userFound = true;
           //Logic written for graph
           this.sortMonths(orders);
+          let orderLocal : any = [];
+          this.rowData.map((order)=>{
+            if(this.userInfo.name === order.userName){
+              orderLocal.push(order);
+            }
+          })
+          if(orderLocal.length === 0) {
+            this.totalUsers = "No orders"
+          }
+          else{
+            orderLocal.sort((a : any, b : any) => {
+              return b.date - a.date;
+            });
+
+            this.totalUsers = String(new Date(orderLocal[0].date).toString().split(" ").splice(1,3).join(" "));
+          }
+          
+
 
           this.chartOptions.data = [{'month' : 'Aug' , 'orderCount' : 2 }]
         });
@@ -395,7 +453,6 @@ export class MainPageComponent implements OnInit {
         this.profileForm.controls['address'].setValue(this.userInfo.address);
         this.profileForm.controls['email'].setValue(this.userInfo.email);
 
-        // this.profileForm.removeValidators;
       }
     });
   }
@@ -666,5 +723,28 @@ export class MainPageComponent implements OnInit {
 
     this.profileFormActive = false;
     this.updateProfileToast = true;
+  }
+
+  useDefaultEmail(checkBoxEvent : any) {
+    console.log(checkBoxEvent)
+    // if (this.userFound && checkBoxEvent.detail.checked) {
+    //   console.log(this.userInfo.email);
+    //   this.emailInput.nativeElement.value = this.userInfo.email;
+    // }
+  } 
+
+  showOrdersInTable() {
+    console.log(this.allOrderData);
+    this.rowData = this.allOrderData
+    this.agGrid.api.setGridOption('columnDefs', this.colDefNew);
+    
+  }
+  showUsersInTable(){
+    console.log(this.allUserData);
+    this.rowData = this.allUserData;
+    
+    this.agGrid.api.setGridOption('columnDefs', this.userColDef);
+
+    
   }
 }

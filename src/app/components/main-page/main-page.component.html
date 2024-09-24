@@ -16,7 +16,7 @@
   </en-toast-group>
 </div>
 
-<div style="padding-top: 10px;">
+<div>
   <en-toast-group
   *ngIf="userAddedToast"
   data-testid="toast-group"
@@ -34,7 +34,7 @@
   </en-toast-group>
 </div>
 
-<div style="padding-top: 10px;">
+<div>
   <en-toast-group
   *ngIf="orderAddedToast"
   data-testid="toast-group"
@@ -52,7 +52,7 @@
   </en-toast-group>
 </div>
 
-<div style="padding-top: 10px;">
+<div>
   <en-toast-group
   *ngIf="emailSentToast"
   data-testid="toast-group"
@@ -64,13 +64,13 @@
     [isActive]="true"
     [isDismissible]="true"
     [description]=""
-    variant="danger"
+    variant="success"
     (click) = 'onToastClick()'
   >Email with Invoice PDF sent successfully!!! </en-toast>
   </en-toast-group>
 </div>
 
-<div style="padding-top: 10px;">
+<div>
   <en-toast-group
   *ngIf="updateProfileToast"
   data-testid="toast-group"
@@ -88,27 +88,34 @@
   </en-toast-group>
 </div>
 
+<en-card>
+  <f-po>
+
+  </f-po>
+</en-card>
+
 <div style="display: flex;flex-direction: column;align-items: center;justify-content: center;">
     <en-layout gap="sm" style="width: 100%;">
-        <en-layout-section>
+        <en-layout-section style="background-color: #2d2f3e;margin: 10px;border-radius: 10px;">
           <f-po>
-            <div style="height: 60px; display: flex;justify-content: space-between;margin: 10px;">
+            <div style="height: 60px; display: flex; align-items:center;justify-content: space-between;margin: 10px;">
                 <div id="name" style="display: flex;justify-content: space-between;">
                   <en-avatar data-testid="avatar-with-image" style="position: relative;left: 10px;">
                     <img src="https://picsum.photos/80/80" alt="Alt text" width="800" height="800">
                   </en-avatar>
 
                 <!-- <en-divider></en-divider> -->
-                  <h2 style="margin-left: 30px;margin-top: 10px">
-                      Retail store
-                  </h2>
+                  <span style="margin-left: 30px;margin-top: 10px;font-size:larger;">
+                      Retail Store
+                  </span>
                 </div>
 
 
                 <div id="user-search" style="display: flex;justify-content: space-between;">
                   <form (ngSubmit)="triggerSearch()" [formGroup]="searchForm" novalidate>
                     <div style="display: flex;">
-                      <en-text-field #inputForm style="width: 150px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User" placeholder="" variant="secondary"></en-text-field>
+                      <!-- <en-text-field #inputForm style="width: 150px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User" placeholder="" variant="secondary"></en-text-field> -->
+                      <en-search-form #inputForm style="width: 150px;" formControlName="searchString" variant="primary" label="Search User" fieldnote="" placeholder="" ngDefaultControl></en-search-form>
                       <en-button data-testid="search-users" type="submit" style="margin-left: 20px; margin-top: 5px;" [isDisabled]="!this.searchForm.valid">Search User</en-button>
                     </div>
                   </form>
@@ -162,148 +169,143 @@
             </div>
           </f-po>
         </en-layout-section>
-        <en-layout-section>
-          <f-po>
-            <div style="display: flex;justify-content: space-around;">
-              <div id="block1" style="height: 100px;width: 200px;border: 1px solid black; border-radius: 10px;background-color: #8981E5;display: flex;flex-direction: column;align-items: center;justify-content: center;color: black;">
-                <h2 style="position: relative;top: 10px;">
-                  {{totalRevenue}}
-                </h2>
-                <h4>
-                  Total Income
-                </h4>
+        <div style="display: flex;">
+          <en-layout-section style="background-color: #2d2f3e;margin-left: 10px;margin-right: 10px;border-radius: 10px;width: 50%;">
+            <f-po>
+              <div style="display: flex;justify-content: space-around; margin: 10px; flex-direction: column;">
+                <span style="margin-left: 5vh;">
+                  All Store Details
+                </span>
+                <div style="display: flex;justify-content: space-around;margin-top: 40px;">
+                  <div id="block1" style="height: 100px;width: 200px; border-radius: 10px;display: flex;flex-direction: column;align-items: center;justify-content: center;color: white">
+                    <h1 style="position: relative;top: 10px;">
+                      {{totalRevenue | currency:"&#8377;"}}
+                    </h1>
+                    <span *ngIf="!userFound">
+                      <div style="display: flex;">
+                        <p>Total Income of store</p>
+                      </div>
+                    </span>
+  
+                    <span *ngIf="userFound">
+                      <div style="display: flex;">
+                        <p>Income from {{userInfo.name}}</p>
+                      </div>
+                    </span>
+                  </div>
+    
+                  <en-divider variant="vertical"></en-divider>
+      
+                  <div id="block2" style="height: 100px;width: 200px;border-radius: 10px;display: flex;flex-direction: column;align-items: center;justify-content: center;color: white;">
+                    <h1 style="position: relative;top: 10px;" (click)="!userFound ? showOrdersInTable() : null">
+                      {{totalOrders}}
+                    </h1>
+                    <span *ngIf="!userFound">
+                      <div style="display: flex;">
+                        <p>Total orders of store</p>
+                      </div>
+                    </span>
+  
+                    <span *ngIf="userFound">
+                      <div style="display: flex;">
+                        <p>Orders from {{userInfo.name}}</p>
+                      </div>
+                    </span>
+                  </div>
+    
+                  <en-divider variant="vertical"></en-divider>
+      
+                  <div id="block3" style="height: 100px;width: 200px;border-radius: 10px;display: flex;flex-direction: column;align-items: center;justify-content: center;color: white;">
+                    <h1 style="position: relative;top: 10px;" (click)="!userFound ? showUsersInTable() : null">
+                      {{totalUsers}}
+                    </h1>
+                    <span *ngIf="!userFound">
+                      <div style="display: flex;">
+                        <p>Total users of store</p>
+                      </div>
+                    </span>
+  
+                    <span *ngIf="userFound">
+                      <div style="display: flex;">
+                        <p>Last purchase date</p>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </f-po>
+          </en-layout-section>
+  
+          <en-layout-section style="background-color: #2d2f3e; width: 50%; border-radius: 10px;margin-right: 10px;">
+            <div style="display: flex;flex-direction: column;">
+              <span style="margin-left: 5vh;margin-top: 10px">
+                Order vs Months graph
+              </span>
+              
+              <div style="display: flex;align-items: center;justify-content: center;">
+                <app-graph-component style="width: 90%;"></app-graph-component>
               </div>
 
-              <en-divider variant="vertical"></en-divider>
-  
-              <div id="block2" style="height: 100px;width: 200px;border: 1px solid black;border-radius: 10px;background-color: #8981E5;display: flex;flex-direction: column;align-items: center;justify-content: center;color: black;">
-                <h2 style="position: relative;top: 10px;">
-                  {{totalOrders}}
-                </h2>
-                <h4>
-                  Total Orders
-                </h4>
-              </div>
-
-              <en-divider variant="vertical"></en-divider>
-  
-              <div id="block3" style="height: 100px;width: 200px;border: 1px solid black;border-radius: 10px;background-color: #8981E5;display: flex;flex-direction: column;align-items: center;justify-content: center;color: black;">
-                <h2 style="position: relative;top: 10px;">
-                  {{totalUsers}}
-                </h2>
-                <h4>
-                  Total Customers
-                </h4>
-              </div>
             </div>
-          </f-po>
-        </en-layout-section>
+          </en-layout-section>
+        </div>
     </en-layout>
 
     <div style="display: flex;width: 100%; height: 100%;justify-content: space-around;">
-      <div style="float: left;left: 0;width: 50%;margin-top: 30px;display: flex;flex-direction: column;">
-        <en-layout>
-          <en-layout-section>
-            <f-po>
-              <div style="display: flex;flex-direction: column;">
-                <h3 style="margin-left: 10px;">
-                  Order vs Months graph
-                </h3>
-                
-                <div>
-                  <!-- <app-graph-component></app-graph-component> -->
-                  <app-graph-component></app-graph-component>
-                  <!-- <app-user-graph-component></app-user-graph-component> -->
-                </div>
-  
-              </div>
-            </f-po>
-          </en-layout-section>
-          <en-layout-section>
-            <f-po>
-              <div style="display: flex;flex-direction: column;align-items: center;justify-content: center;" >
-                <h3>
-                  Send invoice to email
-                </h3>
-
-                <div style="margin-bottom: 10px;">
-                  <input type="file" (change)="handleUpload($event)" />
-                </div>
-
-                <div style="width: 50%;display: flex;">
-                  <form (ngSubmit)='sendEmail()'[formGroup]="emailGroup" novalidate style="display: flex;">
-                  <en-text-field formControlName="invoiceEmail" type="text" data-testid="textarea-invoice" label="Email address" placeholder="" variant="secondary"></en-text-field>
-                  <en-button style="padding-left: 10px;" data-testid="submit" type="submit" [isDisabled]="!userFound">Send Email</en-button>
-                </form>
-                </div>
-
-                <div>
-                  <en-checkbox-item name="email-check" value="checkbox-email-value" [isDisabled]="!userFound">Use registered email address</en-checkbox-item>
-                </div>
-  
-              </div>
-            </f-po>
-          </en-layout-section>
-        </en-layout>
-      </div>
-
-      <!-- <en-divider variant="vertical"></en-divider> -->
-
-      <div style="float: left;left: 0;width: 50%;margin-top: 30px;display: flex;flex-direction: column;">
-        <en-layout>
-          <en-layout-section>
-            <f-po>
-              <div style="display: flex; flex-direction: column;align-items: center; justify-content: center;">
-                <div style="display: flex;">
-                  <h3>
-                    {{headerText}}
-                  </h3>
-
-                  <en-button style="padding-left: 10px;position: absolute; right: 10px;margin-top: 15px;" data-testid="exportPdf-btn" type="submit" (click)="exportPdf()" [isDisabled]="!userFound">Export PDF</en-button>
-                </div>
-
-                <div style="display: flex;">
-                  <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Order Form" (dialogClose)="onDialogClose($event)" #dialogForm [isDisabled]="!userFound">
-                    <en-button slot="trigger" [isDisabled]="!userFound"><en-icon-add size="md"></en-icon-add></en-button>
-                    <f-po>
-                      <div>
-                        <form (ngSubmit)='addOrder()' [formGroup]="orderForm" novalidate id="orderFormEle">
-                          <!-- <en-text-field style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field> -->
-                          
-                          <en-datepicker-field id="datePicker-comp" data-testid="datetimepicker-field" label="Select a Date" variant="primary" (dateChanged) = 'onDateSelect($event)'></en-datepicker-field>
-                          <en-text-field style="width: 275px;" formControlName="amount" data-testid="textarea-userAddr" label="Amount" variant="secondary"></en-text-field>
       
-                          <div>
-                            <en-button data-testid="add-order" type="submit" [isDisabled] = "!orderForm.valid" (click)="resetOrderForm()">Add order</en-button>
-                            <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetOrderForm()" >Reset</en-button>
-                          </div>
-                        </form>
-                      </div>
-                    </f-po>
-                  </en-dialog>
-  
-              <en-button style="padding-left: 10px; margin-bottom: 10px;" data-testid="delete-btn" type="submit" (click)="deleteSelected()" [isDisabled] = "!enableDelete">Delete</en-button>
-  
-              <!-- <en-dialog style="padding-left: 10px;" data-testid="dialog" heading="Chart data">
-                
-                <en-button slot="trigger">Show chart</en-button>
-                <f-po>
+      <div style="width: 100%;margin-top: 30px;display: flex;flex-direction: column;background-color: #2d2f3e;margin: 10px;border-radius: 10px;">
+
+          
+
+        <en-layout>
+          <en-layout-section>
+            <f-po>
+              
+              <div style="display: flex; flex-direction: column; margin: auto; width: 90%;position: relative;left: -35px;">
+
+                <div style="display: flex; justify-content: space-between;">
+                  <span style="font-size: larger;margin-top: 20px;">
+                    {{headerText}}
+                  </span>
                   <div>
-                    <ag-charts
-                      [options]="chartOptions">
-                    </ag-charts>
+                    <div style="display: flex; margin-top: 20px; margin-right: -10vh;"> 
+                      <en-dialog data-testid="dialog" heading="Order Form" (dialogClose)="onDialogClose($event)" #dialogForm [isDisabled]="!userFound" title="Add order" >
+                        <en-button slot="trigger" [isDisabled]="!userFound"><en-icon-add size="lg"></en-icon-add></en-button>
+                        <!-- <en-icon-add size="md" [isDisabled]="!userFound"></en-icon-add> -->
+                        <f-po>
+                          <div>
+                            <form (ngSubmit)='addOrder()' [formGroup]="orderForm" novalidate id="orderFormEle">
+                              <!-- <en-text-field style="width: 40px;" formControlName="searchString" type="text" data-testid="textarea-search" label="Search User / Phone Number" placeholder="" variant="secondary"></en-text-field> -->
+                              
+                              <en-datepicker-field id="datePicker-comp" data-testid="datetimepicker-field" label="Select a Date" variant="primary" (dateChanged) = 'onDateSelect($event)'></en-datepicker-field>
+                              <en-text-field style="width: 275px;" formControlName="amount" data-testid="textarea-userAddr" label="Amount" variant="secondary"></en-text-field>
+          
+                              <div>
+                                <en-button data-testid="add-order" type="submit" [isDisabled] = "!orderForm.valid" (click)="resetOrderForm()">Add order</en-button>
+                                <en-button data-testid="reset" type="reset" variant="secondary" (click)="resetOrderForm()" >Reset</en-button>
+                              </div>
+                            </form>
+                          </div>
+                        </f-po>
+                      </en-dialog>
+      
+                      <en-button style="padding-left: 10px; margin-bottom: 10px;" data-testid="delete-btn" type="submit" (click)="deleteSelected()" [isDisabled] = "!enableDelete" title="Delete order"><en-icon-delete></en-icon-delete></en-button>
+                      <en-button style="padding-left: 10px;" data-testid="exportPdf-btn" type="submit" (click)="exportPdf()" [isDisabled]="!userFound" title="Export PDF"><en-icon-export></en-icon-export></en-button>
+                    </div>
                   </div>
-                </f-po>
-              </en-dialog> -->
                 </div>
+              </div>
+            </f-po>
+          </en-layout-section>
+              
+          <en-layout-section>
+            <f-po>
 
-
-                
-
-                <ag-grid-angular 
+                <div style="width: 100%; display: flex;align-items: center;justify-content: center;">
+                  <ag-grid-angular 
                   #agGrid
                   class="ag-theme-alpine-dark"
-                  style="height: 550px; width: 600px;"
+                  style="height: 550px; width: 95%;"
                   [rowData]="rowData"
                   [columnDefs]="colDef"
                   [defaultColDef]="defaultColDef"
@@ -314,10 +316,10 @@
                   [paginationPageSize]="paginationPageSize"
                   [paginationPageSizeSelector]="paginationSizeSelector"
                 />
-  
-          </div>
+                </div>
             </f-po>
           </en-layout-section>
+              
         </en-layout>
       </div>
     </div>
